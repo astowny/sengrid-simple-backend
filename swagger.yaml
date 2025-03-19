@@ -1,0 +1,92 @@
+openapi: 3.0.0
+info:
+  title: SendGrid Simple Backend API
+  description: A simple backend API for sending emails using SendGrid
+  version: 1.0.0
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:3000
+    description: Local development server
+
+paths:
+  /api/health:
+    get:
+      summary: Health check endpoint
+      description: Returns the API health status
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "OK"
+
+  /api/send-email:
+    post:
+      summary: Send an email
+      description: Sends an email using SendGrid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+                - name
+                - message
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: Sender's email address
+                  example: "user@example.com"
+                name:
+                  type: string
+                  description: Sender's name
+                  example: "John Doe"
+                message:
+                  type: string
+                  description: Email message content
+                  example: "Hello, this is a test message."
+      responses:
+        '200':
+          description: Email sent successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Email envoyé avec succès"
+        '400':
+          description: Bad request - missing required fields
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Les champs email, name et message sont requis"
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Erreur lors de l'envoi de l'email"
+
+components:
+  schemas: {}
